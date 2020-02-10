@@ -1,9 +1,11 @@
 import Vue from 'vue'
-import './plugins/axios'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import './plugins/element.ts'
+import '@/plugins/axios'
+import App from '@/App.vue'
+import router from '@/router'
+import store from '@/store'
+import '@/plugins/element.ts'
+
+import '@/assets/stylus/main.styl'
 
 Vue.config.productionTip = false
 

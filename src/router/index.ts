@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Layout from '@/layout/index.vue'
-import Home from '../views/Home.vue'
 import { getToken } from '@/utils/auth'
 import whiteList from '@/router/whiteList'
 
@@ -14,16 +13,20 @@ const routes = [
     component: Layout,
     children: [
       {
-        path: '/',
+        path: '/home',
         name: 'Home',
-        component: Home
+        component: () => import('../views/Home/index.vue')
+      },
+      {
+        path: '/',
+        redirect: '/home'
       }
     ]
   },
   {
-    path: '/login',
+    path: '/Login',
     name: 'Login',
-    component: () => import('../views/login/index.vue')
+    component: () => import('../views/Login/index.vue')
   }
 ]
 
@@ -42,7 +45,7 @@ router.beforeEach((to, from, next) => {
   const token: string = getToken()
   let nextPath = ''
   if (!token) {
-    nextPath = '/login'
+    nextPath = '/Login'
   }
   console.log(nextPath)
   nextPath ? next(nextPath) : next()
