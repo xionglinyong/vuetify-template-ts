@@ -1,4 +1,9 @@
-# exemption_vue_ts
+# vue_ts_element_template
+常用的使用ts的vue项目,添加的依赖有：
+- vue-router
+- vuex
+- axios
+- element-ui
 
 ## Project setup
 ```
