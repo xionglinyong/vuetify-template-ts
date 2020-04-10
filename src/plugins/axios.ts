@@ -5,6 +5,7 @@ import axios, { AxiosResponse } from 'axios'
 import whiteList from '@/plugins/whiteList'
 import { getToken } from '@/utils/auth'
 import router from '@/router'
+import store from '../store/index'
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
@@ -12,16 +13,11 @@ import router from '@/router'
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 const config = {
-  baseURL: process.env.baseURL || process.env.apiUrl,
-  headers: {
-    'X-Custom-Source': 'browser'
-  },
+  baseURL: process.env.baseURL || process.env.apiUrl || 'http://218.17.185.200:10069/',
   timeout: 60 * 1000 // 请求超时
   // withCredentials: true, // Check cross-site Access-Control
 }
-
 const _axios = axios.create(config)
-
 // 请求拦截
 _axios.interceptors.request.use(
   (cfg: any) => {
@@ -30,7 +26,7 @@ _axios.interceptors.request.use(
       if (!token) {
         router.replace('/Login')
       } else {
-        cfg.headers.Authorization = `BasicAuth ${token}`
+        cfg.headers.Authorization = `Bearer ${token}`
       }
     }
     return cfg
@@ -43,12 +39,17 @@ _axios.interceptors.request.use(
 
 // 响应拦截
 _axios.interceptors.response.use(
-  (res: AxiosResponse<any>) => {
+  async (res: AxiosResponse<any>) => {
     // Do something with response data
-    return res
+    if (res.status === 401) {
+      await store.dispatch('user/refreshToken')
+    }
+    return res.data
   },
-  (err: Error) => {
-    // Do something with response error
+  async (err: Error) => {
+    if (err.message.includes('401')) {
+      await store.dispatch('user/refreshToken')
+    }
     return Promise.reject(err)
   }
 )
