@@ -1,0 +1,36 @@
+@import "variable.styl"
+*
+  margin 0
+  padding 0
+html,body
+  width 100%
+  height 100%
+  overflow hidden
+  background url("../img/login.png")
+  background-size 100% 100%
+
+//全局设置滚动条
+::-webkit-scrollbar
+  width 5px
+  background rgba(0,0,0,0)
+  border-radius 5px
+::-webkit-scrollbar-button
+  display none
+::-webkit-scrollbar-thumb
+  width 5px
+  background primaryColor
+  &:horizontal
+    height 5px !important
+  background #afafaf
+  border-radius 5px
+
+.el-menu-item
+  color #fff
+  &.is-active
+    color #4195d8
+    background rgba(255,255,255,.9)
+  &:hover
+    color #4195d8
+    background rgba(255,255,255,.5)
+  i
+    color currentColor
