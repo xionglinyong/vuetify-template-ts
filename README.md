@@ -4,7 +4,12 @@
 - vuex
 - axios
 - element-ui
-
+- jset单元测
+#功能
+- 登录
+- 动态路由
+- 页面框架
+- jest单元测试
 ## Project setup
 ```
 npm install
