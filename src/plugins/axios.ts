@@ -1,5 +1,5 @@
 import Vue, { PluginObject } from 'vue'
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import axios, { AxiosResponse } from 'axios'
 import whiteList from '@/plugins/whiteList'
@@ -8,12 +8,12 @@ import router from '@/router'
 import store from '../store/index'
 
 // Full config:  https://github.com/axios/axios#request-config
-// axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
+// axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || 'http://119.29.237.201:5810';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 const config = {
-  baseURL: process.env.baseURL || process.env.apiUrl || 'http://218.17.185.200:10069/',
+  baseURL: process.env.baseURL || process.env.apiUrl || 'http://119.29.237.201:5810/api/v1/',
   timeout: 60 * 1000 // 请求超时
   // withCredentials: true, // Check cross-site Access-Control
 }
@@ -21,13 +21,16 @@ const _axios = axios.create(config)
 // 请求拦截
 _axios.interceptors.request.use(
   (cfg: any) => {
-    if (!whiteList.includes(cfg.url)) {
-      const token = getToken()
-      if (!token) {
-        router.replace('/Login')
-      } else {
-        cfg.headers.Authorization = `Bearer ${token}`
+    try {
+      if (!whiteList.includes(cfg.url)) {
+        const token = getToken()
+        if (!token) {
+          router.replace('/login')
+        } else {
+          // cfg.headers.Authorization = `Bearer ${token}`
+        }
       }
+    } catch (e) {
     }
     return cfg
   },

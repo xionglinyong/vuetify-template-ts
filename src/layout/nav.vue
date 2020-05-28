@@ -1,47 +1,33 @@
-<template>
-  <nav :class="$style.nav">
-    <h1>{{ sysName }}</h1>
-    <el-dropdown
+<template lang="pug">
+  nav(:class="$style.nav")
+    h1 {{ sysName }}
+    el-dropdown(
       :class="$style.dropdown"
       trigger="click"
       @command="handleClick"
-    >
-      <span class="el-dropdown-link">
-        {{ userName }}<i class="el-icon-arrow-down el-icon--right" />
-      </span>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="editInfo">
-          企业信息修改
-        </el-dropdown-item>
-        <el-dropdown-item command="editPassword">
-          更改密码
-        </el-dropdown-item>
-        <el-dropdown-item command="loginOut">
-          退出登录
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
-
-    <el-dialog
+    )
+      span.el-dropdown-link
+        |{{ userName }}
+        i.el-icon-arrow-down.el-icon--right
+      el-dropdown-menu(slot="dropdown")
+        el-dropdown-item(command="editInfo") 企业信息修改
+        el-dropdown-item(command="editPassword") 更改密码
+        el-dropdown-item(command="loginOut") 退出登录
+    el-dialog(
       :title="title"
       :visible.sync="visible"
       append-to-body
-      @close="handleClosed"
-    >
-      <div :class="$style.component">
-        <component
+      @close="handleClosed")
+      div(:class="$style.component")
+        component(
           :is="currentComponent"
-          :enterprise-id="12313"
-        />
-      </div>
-    </el-dialog>
-  </nav>
+          :enterprise-id="12313")
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { Getter, namespace } from 'vuex-class'
-import { UserInfo } from '@/interface/user'
+import { UserInfo } from '../interface/user'
 import { getUserInfo } from '@/utils/auth'
 
 const user = namespace('user')
@@ -63,7 +49,7 @@ export default class Nav extends Vue {
 
     @Getter user!: UserInfo
 
-    @user.Action('loginOut') loginOut!: Function
+    @user.Action('loginOut') loginOut!: ()=>void
 
     get sysName () {
       const str = '用户'

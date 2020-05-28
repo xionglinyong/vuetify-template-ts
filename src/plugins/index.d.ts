@@ -1,5 +1,5 @@
 import Vue, { VueConstructor } from 'vue'
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { AxiosInstance } from 'axios'
 import { MessageType } from '@/interface/enum'

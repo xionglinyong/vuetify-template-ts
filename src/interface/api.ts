@@ -1,6 +1,8 @@
+import {RequestMethod} from '@/interface/enum'
+
 interface API {
   url: string;
-  method: string;
+  method: RequestMethod;
 }
 
 export interface APIS {

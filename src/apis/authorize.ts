@@ -1,5 +1,5 @@
 import { APIS } from '@/interface/api'
-import { LoginUser } from '@/interface/user'
+import { LoginUser } from '../interface/user'
 import { RequestMethod } from '@/interface/enum'
 
 const urlHead = '/api/Authorize'

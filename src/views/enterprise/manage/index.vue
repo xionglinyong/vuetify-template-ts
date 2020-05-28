@@ -1,5 +1,5 @@
-<template>
-  <div>企业管理</div>
+<template lang="pug">
+  div 企业管理
 </template>
 
 <script lang="ts">

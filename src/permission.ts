@@ -4,7 +4,6 @@ import { getToken } from '@/utils/auth'
 import store from '@/store'
 import { Route, RouteConfig } from 'vue-router'
 import { Menus } from '@/interface/permission'
-import Layout from '@/layout/index.vue'
 
 let i = 0
 
@@ -20,7 +19,7 @@ function recursionRouter (menus: Array<Menus>): Array<RouteConfig> {
   for (const menu of menus) {
     const route: RouteConfig = {
       path: menu.path,
-      component: Layout,
+      component: () => import('@/layout/index.vue'),
       name: menu.name,
       meta: menu.meta
     }
@@ -36,30 +35,25 @@ function recursionRouter (menus: Array<Menus>): Array<RouteConfig> {
 }
 
 router.beforeEach(async (to: Route, from: Route, next: any) => {
-  // debugger
-  // console.log(from.path, to.path)
-  let nextPath = ''
+  console.log(whiteList.includes(to.path))
   // 校验是否在白名单之内
   if (whiteList.includes(to.path)) {
     next()
-    return
   } else {
+    // 查看是否有token
+    const token: string = getToken()
+    if (!token) {
+      next('/login', true)
+      return
+    }
+    // 首次加载或刷新页面
     if (i++ === 0) {
       const children = await store.getters.menu
-      console.log(recursionRouter(children))
       router.addRoutes(recursionRouter(children))
-      console.log(router)
       next({ ...to, replace: true })
     } else {
       next()
     }
-  }
-
-  // 查看是否有token
-  const token: string = getToken()
-  if (!token) {
-    nextPath = '/login'
-    next()
   }
 })
 

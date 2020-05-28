@@ -9,7 +9,7 @@ const asyncRoutes: Array<Menus> = [
       title: '首页',
       icon: 'el-icon-house'
     },
-    componentPath: '/Home'
+    componentPath: '/home'
   },
   {
     path: '/enterprise',
@@ -27,11 +27,19 @@ const asyncRoutes: Array<Menus> = [
       },
       {
         path: 'manage',
-        componentPath: '/enterprise/ledger',
+        componentPath: '/enterprise/manage',
         name: 'Manage',
         meta: { title: '企业管理' }
       }
     ]
+  },
+  {
+    path: '*',
+    name: '404',
+    meta: {
+      title: '404-页面找不到'
+    },
+    componentPath: '/404'
   }
 ]
 export default {
@@ -39,13 +47,13 @@ export default {
     menu: getUserMenu() ?? asyncRoutes
   },
   mutations: {
-    SET_MENU (state: any, menus: Menus) {
+    SET_MENU (state: any, menus: Array<Menus>) {
       state.menu = menus
       setUserMenu(menus)
     }
   },
   actions: {
-    setMenu ({ commit }: { commit: any }, menus: Menus) {
+    setMenu ({ commit }: { commit: any }, menus: Array<Menus>) {
       commit('SET_MENU', menus ?? getUserMenu())
     }
   },

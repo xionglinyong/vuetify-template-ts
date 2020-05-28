@@ -1,6 +1,6 @@
 import { APIS } from '../interface/api'
 import { RequestMethod } from '@/interface/enum'
-import { UserInput, UserQuery } from '@/interface/user'
+import { UserInput, UserQuery } from '../interface/user'
 
 const axios = window.axios
 const urlHead = '/api/User'

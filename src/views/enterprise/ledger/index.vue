@@ -1,5 +1,5 @@
-<template>
-  <div>企业台账</div>
+<template lang="pug">
+  div 企业台账
 </template>
 
 <script lang="ts">

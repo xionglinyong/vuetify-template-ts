@@ -17,7 +17,7 @@ const routes = [
           title: '首页',
           icon: 'el-icon-house'
         },
-        component: () => import('../views/Home/index.vue')
+        component: () => import('@/views/home/index.vue')
       },
       {
         path: '/',
@@ -28,7 +28,10 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/Login/index.vue')
+    meta: {
+      title: '登录'
+    },
+    component: () => import('@/views/login/index.vue')
   }
 ]
 

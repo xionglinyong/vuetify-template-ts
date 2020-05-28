@@ -44,11 +44,11 @@ export function deleteUserInfo (): void {
   rmItem(userInfoName)
 }
 
-export function getUserMenu (): Menus {
+export function getUserMenu (): Array<Menus> {
   return getItem(userMenuName)
 }
 
-export function setUserMenu (menus: Menus): void {
+export function setUserMenu (menus: Array<Menus>): void {
   setItem(userMenuName, menus)
 }
 

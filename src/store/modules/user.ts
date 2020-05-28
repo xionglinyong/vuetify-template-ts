@@ -9,7 +9,7 @@ import {
   setToken,
   setUserInfo
 } from '@/utils/auth'
-import { LoginUser, UserInfo } from '@/interface/user'
+import { LoginUser, UserInfo } from '../../interface/user'
 import router from '@/router'
 import { getUserInfoByToken, login, refreshToken } from '@/apis/authorize'
 
