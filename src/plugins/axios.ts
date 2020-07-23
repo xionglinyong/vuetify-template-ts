@@ -1,11 +1,12 @@
-import Vue, { PluginObject } from 'vue'
+import Vue, {PluginObject} from 'vue'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import axios, { AxiosResponse } from 'axios'
+import axios, {AxiosResponse} from 'axios'
 import whiteList from '@/plugins/whiteList'
-import { getToken } from '@/utils/auth'
+import {getToken} from '@/utils/auth'
 import router from '@/router'
 import store from '../store/index'
+import {MessageType} from '@/interface/enum'
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || 'http://119.29.237.201:5810';
@@ -50,10 +51,17 @@ _axios.interceptors.response.use(
     return res.data
   },
   async (err: Error) => {
-    if (err.message.includes('401')) {
-      await store.dispatch('user/refreshToken')
+    try {
+      if (err.message.includes('401')) {
+        await store.dispatch('user/refreshToken')
+      }else {
+        throw err
+      }
+    } catch (e) {
+      window.tips(err.message,MessageType.error)
+    }finally {
+      return Promise.reject(err)
     }
-    return Promise.reject(err)
   }
 )
 
@@ -67,7 +75,7 @@ Plugin.install = (Vue) => {
   window.axios = _axios
   Object.defineProperties(Vue.prototype, {
     $axios: {
-      get () {
+      get() {
         return _axios
       }
     }
