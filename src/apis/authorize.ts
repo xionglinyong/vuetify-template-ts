@@ -1,6 +1,6 @@
-import { APIS } from '@/interface/api'
-import { LoginUser } from '../interface/user'
-import { RequestMethod } from '@/interface/enum'
+import { APIS } from '@/types/api'
+import { LoginUser } from '../types/user'
+import { RequestMethod } from '@/types/enum'
 
 const urlHead = '/api/Authorize'
 const apis: APIS = {

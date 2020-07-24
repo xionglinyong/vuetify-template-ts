@@ -1,6 +1,6 @@
 import { getItem, rmItem, setItem } from '@/utils/localstorage'
-import { UserInfo } from '@/interface/user'
-import { Menus } from '@/interface/permission'
+import { UserInfo } from '@/types/user'
+import { Menus } from '@/types/permission'
 
 // token名称
 const tokenName = 'LOGIN_TOKEN'
@@ -36,7 +36,7 @@ export function getUserInfo (): UserInfo {
   return getItem(userInfoName)
 }
 
-export function setUserInfo (user: object): void {
+export function setUserInfo (user: any): void {
   setItem(userInfoName, user)
 }
 

@@ -2,7 +2,7 @@ import Vue, { VueConstructor } from 'vue'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { AxiosInstance } from 'axios'
-import { MessageType } from '@/interface/enum'
+import { MessageType } from '@/types/enum'
 
 declare global {
   interface Window {

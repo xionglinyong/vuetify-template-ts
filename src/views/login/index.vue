@@ -1,54 +1,88 @@
 <template lang="pug">
-  div
-    div(:class="$style.loginPage")
-      h1 小废水企业废水排放监管平台
-      el-form(
-        :rules="rules"
-        ref="loginFrom"
-        :class="$style.form"
-        :model="user"
-      )
-        el-form-item(prop="LoginName")
-          el-input(
-            prefix-icon="el-icon-user-solid"
-            placeholder="请输入登录名"
-            v-model="user.LoginName")
-        el-form-item(prop="PassWord")
-          el-input(
-            prefix-icon="el-icon-key"
-            type="password"
-            placeholder="请输入登录密码"
-            v-model="user.PassWord"
-            @keyup.enter.native="handleLogin")
-        el-form-item
-          el-button(
-            v-loading="loading"
-            type="primary"
-            @click="handleLogin") 登录
-        div(:class="$style.reg")
-          a(@click="toRegister") 注册
-          a(@click="toRegister") 忘记密码
+  v-app
+    v-main
+      v-snackbar(
+        v-model="snackbar.visible"
+        :top="true"
+        :color="snackbar.color"
+        :multi-line="multiLine") {{ snackbar.text }}
+        template(v-slot:action="{ attrs }")
+          v-btn(
+            color="#fff"
+            text
+            dark
+            icon
+            v-bind="attrs"
+            @click="snackbar.visible = false")
+            v-icon mdi-close
+      v-container
+        div(:class="$style.loginPage")
+          h1 通用后台模板
+          v-form(
+            ref="form"
+            :v-model="true"
+            :lazy-validation="false")
+            v-text-field(
+              v-model="user.LoginName"
+              :counter="20"
+              outlined
+              clearable
+              :rules="loginNameRules"
+              label="用户名"
+              required
+              prepend-icon="mdi-account")
+
+            v-text-field(
+              v-model="user.PassWord"
+              :counter="20"
+              outlined
+              clearable
+              :rules="passwordRules"
+              label="密码"
+              required
+              type="password"
+              prepend-icon="mdi-lock")
+            v-btn(
+              color="primary"
+              :loading="loading"
+              append-icon="close"
+              @click="handleLogin") 登录
+            div(:class="$style.reg")
+              a() 注册
+              a() 忘记密码
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { LoginUser } from '../../interface/user'
-import { Message } from 'element-ui'
+import { Component, Ref, Vue } from 'vue-property-decorator'
+import { LoginUser } from '../../types/user'
 import { namespace } from 'vuex-class'
-import { MessageType } from '@/interface/enum'
 
 const user = namespace('user')
 
-@Component
-export default class Login extends Vue {
-  rules: object={
-    LoginName: [
-      { required: true, message: '请输入用户名', trigger: 'blur' }
-    ],
-    PassWord: [
-      { required: true, message: '请输入密码', trigger: 'blur' }
-    ]
+@Component({
+  components: {
   }
+})
+export default class Login extends Vue {
+  snackbar:{
+    visible:boolean;
+    text:string;
+    color:string;
+  }={
+    visible: false,
+    text: '',
+    color: 'success'
+  }
+
+  loginNameRules= [
+    (v:string) => !!v || '请输入用户名',
+    (v:string) => (v && v.length <= 20) || '用户名必须是20位以内'
+  ]
+
+  passwordRules= [
+    (v:string) => !!v || '请输入密码',
+    (v:string) => (v && v.length <= 20) || '用户名必须是20位以内'
+  ]
 
   user: LoginUser={
     LoginName: '',
@@ -59,35 +93,29 @@ export default class Login extends Vue {
   loading=false
 
   // vuex
-  @user.Action('login') login!: Function
+  @user.Action('login') login!: (user:LoginUser)=>void
+
+  @Ref('form') readonly form!:HTMLElement
 
   async handleLogin () {
     this.loading = true
     try {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      const valid = await this.$refs.loginFrom.validate()
+      const valid = await this.form.validate()
       if (valid) {
         await this.login(this.user)
       } else {
-        return false
+        throw new Error('请输入账号或者密码')
       }
     } catch (e) {
-      if (typeof e === 'boolean') {
-        this.tips('请输入完整信息', MessageType.error)
-      } else if (typeof e === 'string') {
-        this.tips(e, MessageType.error)
+      this.snackbar = {
+        text: e.message,
+        visible: true,
+        color: 'error'
       }
     }
     this.loading = false
-  }
-
-  tips (message = '操作成功', type: MessageType = MessageType.success) {
-    Message({
-      message,
-      type,
-      showClose: true
-    })
   }
 }
 </script>
@@ -95,7 +123,7 @@ export default class Login extends Vue {
 <style lang="stylus" rel="stylesheet/stylus" module>
 .loginPage
   position absolute
-  width 600px
+  width 450px
   top 40%
   left 50%
   max-width 100%
@@ -108,23 +136,19 @@ export default class Login extends Vue {
     font-size 28px
     font-family Microsoft YaHei
     font-weight 400
-    color rgba(255,255,255,1)
     letter-spacing 10px
-  .form
-    width 300px
-    margin 0 auto
-    .reg
-      position relative
-      a
-        position absolute
-        color #fff
-        cursor pointer
-        &:first-child
-          left 0
-        &:last-child
-          right 0
-        &:hover
-          text-decoration underline
+  .reg
+    position relative
+    a
+      position absolute
+      cursor pointer
+      color #409EFF
+      &:first-child
+        left 0
+      &:last-child
+        right 0
+      &:hover
+        text-decoration underline
   button
     width 100%
 </style>

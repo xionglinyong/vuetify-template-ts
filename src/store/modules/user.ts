@@ -9,7 +9,7 @@ import {
   setToken,
   setUserInfo
 } from '@/utils/auth'
-import { LoginUser, UserInfo } from '../../interface/user'
+import { LoginUser, UserInfo } from '../../types/user'
 import router from '@/router'
 import { getUserInfoByToken, login, refreshToken } from '@/apis/authorize'
 
@@ -34,7 +34,7 @@ export default {
     }
   },
   actions: {
-    async login ({ commit, dispatch }: { commit: any; dispatch: Function }, user: LoginUser) {
+    async login ({ commit, dispatch }: { commit: any; dispatch: (name:string)=>void }, user: LoginUser) {
       const res: any = await login(user)
       if (res.status === 200) {
         // 处理登录操作
@@ -65,7 +65,7 @@ export default {
       }
     },
     loginOut ({ commit }: { commit: any }) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const routes: any = router.options.routes
       const layout: any = routes.find((item: any) => item.name === 'Layout')

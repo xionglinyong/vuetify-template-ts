@@ -1,52 +1,76 @@
 <template lang="pug">
-  div(:class="$style.layout")
-    Nav(:class="$style.nav")
-    el-menu(
-      :default-active.sync="activeIndex"
-      router
-      background-color="#3379c4"
-      :class="$style.menu"
-      text-color="#fff"
-      active-text-color="#409EFF"
-      class="el-menu-vertical-demo"
-      v-if="menus")
-      template(v-for="menu of menus")
-        el-submenu(
-          :key="menu.name"
-          :index="menu.path"
-          v-if="menu.children && menu.children.length" )
-          template(slot="title")
-            i(:class="menu.meta.icon")
-            span {{ menu.meta.title }}
-          el-menu-item(
-            v-for="children of menu.children"
-            :index="`${menu.path}/${children.path}`"
-            :key="children.name")
-            i(
-              :class="children.meta.icon"
-              v-if="children.meta.icon")
-            span(slot="title") {{ children.meta.title }}
-          </el-menu-item>
-        el-menu-item(
-          v-else-if="menu.name!=='404'"
-          :index="menu.path"
-          :key="menu.name")
-          i(:class="menu.meta.icon")
-          <span slot="title">{{ menu.meta.title }}</span>
-        </el-menu-item>
-    div(:class="$style.routerViewInner")
-      transition(
-        name="rv-fade"
-        mode="out-in")
-        keep-alive
-          router-view(:class="$style.routerView")
+  v-app
+    v-navigation-drawer(
+      v-model="drawerVisible"
+      class="indigo accent-2"
+      width="160"
+      dark
+      app
+      clipped)
+      v-list(dense nav)
+        template(v-for="menu in menus")
+          template(v-if="menu.name!=='404' && (!menu.children || menu.children.length===0)")
+            v-list-item(link :key="menu.meta.title")
+              v-list-item-icon
+                v-icon {{ menu.meta.icon }}
+              v-list-item-content
+                v-list-item-title {{ menu.meta.title }}
+          template(v-if="menu.name!=='404' && (menu.children && menu.children.length>0)")
+            v-menu(top :offset-x="offset")
+              template v-slot:activator="{ on, attrs }"
+                v-btn(
+                  color="primary"
+                  dark
+                  v-bind="attrs"
+                  v-on="on") Dropdown
+              v-list
+                v-list-item(
+                  v-for="(item, index) in items"
+                  :key="index"
+                  @click="")
+                  v-list-item-title {{ item.title }}
+    v-app-bar(
+      color="indigo darken-2"
+      app
+      clipped-left
+      dense
+      dark)
+      v-app-bar-nav-icon(@click.stop="drawerVisible=!drawerVisible")
+      v-toolbar-title 系统名
+      v-spacer
+      v-btn(icon)
+        v-icon mdi-heart
+      v-btn(icon)
+        v-icon mdi-magnify
+      v-menu(
+        left
+        bottom)
+        template(v-slot:activator="{ on, attrs }")
+          v-btn(
+            icon
+            v-bind="attrs"
+            v-on="on")
+            v-icon mdi-dots-vertical
+        v-list
+          v-list-item(
+            v-for="n in 5"
+            :key="n"
+            @click="() => {}")
+            v-list-item-title Option {{ n }}
+    v-main
+      v-container(class="fill-height")
+        transition(
+          name="rv-fade"
+          mode="out-in")
+          keep-alive
+            router-view(:class="$style.routerView")
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import Nav from '@/layout/nav.vue'
 import { Getter } from 'vuex-class'
-import { Menus } from '@/interface/permission'
+import { Menus } from '@/types/permission'
 
 @Component({
   components: {
@@ -55,6 +79,8 @@ import { Menus } from '@/interface/permission'
 })
 export default class Layout extends Vue {
   activeIndex = '/company'
+  drawerVisible=true
+  links=[]
   @Getter('menu') menus!: Array<Menus>
 
   mounted () {
@@ -101,7 +127,7 @@ export default class Layout extends Vue {
       transform translate3d(0px, 0px, 0px) rotateY(0deg)
 </style>
 <style lang="stylus" rel="stylesheet/stylus" module>
-  .layout
+  .layout1
     width 100%
     height 100%
     display grid

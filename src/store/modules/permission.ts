@@ -1,4 +1,4 @@
-import { Menus } from '@/interface/permission'
+import { Menus } from '@/types/permission'
 import { getUserMenu, setUserMenu } from '@/utils/auth'
 
 const asyncRoutes: Array<Menus> = [
@@ -7,7 +7,7 @@ const asyncRoutes: Array<Menus> = [
     name: 'Home',
     meta: {
       title: '首页',
-      icon: 'el-icon-house'
+      icon: 'mdi-home'
     },
     componentPath: '/home'
   },
@@ -16,7 +16,7 @@ const asyncRoutes: Array<Menus> = [
     name: 'Enterprise',
     meta: {
       title: '企业管理',
-      icon: 'el-icon-menu'
+      icon: 'mdi-widgets'
     },
     children: [
       {

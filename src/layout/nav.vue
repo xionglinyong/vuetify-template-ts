@@ -1,90 +1,49 @@
 <template lang="pug">
-  nav(:class="$style.nav")
-    h1 {{ sysName }}
-    el-dropdown(
-      :class="$style.dropdown"
-      trigger="click"
-      @command="handleClick"
-    )
-      span.el-dropdown-link
-        |{{ userName }}
-        i.el-icon-arrow-down.el-icon--right
-      el-dropdown-menu(slot="dropdown")
-        el-dropdown-item(command="editInfo") 企业信息修改
-        el-dropdown-item(command="editPassword") 更改密码
-        el-dropdown-item(command="loginOut") 退出登录
-    el-dialog(
-      :title="title"
-      :visible.sync="visible"
-      append-to-body
-      @close="handleClosed")
-      div(:class="$style.component")
-        component(
-          :is="currentComponent"
-          :enterprise-id="12313")
+  v-main
+    v-main
+      v-main
+        v-main
+          v-main
+            v-menu(top :offset-x="offset")
+              template v-slot:activator="{ on, attrs }"
+                v-btn(
+                  color="primary"
+                  dark
+                  v-bind="attrs"
+                  v-on="on") Dropdown
+
+              v-list
+                v-list-item(
+                  v-for="(item, index) in items"
+                  :key="index"
+                  @click="")
+                  v-list-item-title {{ item.title }}
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { Getter, namespace } from 'vuex-class'
-import { UserInfo } from '../interface/user'
-import { getUserInfo } from '@/utils/auth'
+import { Menus } from '@/types/permission'
 
 const user = namespace('user')
 
-  enum MenuCommand {
-    editInfo = 'editInfo',
-    editPassword = 'editPassword',
-    loginOut = 'loginOut'
+@Component({
+  components: {}
+})
+export default class Nav extends Vue {
+  activeIndex = '/company'
+
+  @Getter('menu') menus!: Array<Menus>
+  @user.Action('loginOut') loginOut!: ()=>void
+
+  @Watch('$route', { deep: true })
+  onRouteChange (value: any) {
+    this.activeIndex = value.path
   }
 
-  @Component({
-    components: {}
-  })
-export default class Nav extends Vue {
-    visible = false
-    title = ''
-    currentComponent = ''
-    userInfo: UserInfo = getUserInfo()
-
-    @Getter user!: UserInfo
-
-    @user.Action('loginOut') loginOut!: ()=>void
-
-    get sysName () {
-      const str = '用户'
-      return str
-    }
-
-    get userName () {
-      const name = ''
-
-      return name
-    }
-
-    handleClick (command: MenuCommand) {
-      switch (command) {
-        case MenuCommand.editInfo:
-          this.visible = true
-          this.currentComponent = 'Info'
-          this.title = '修改企业信息'
-          break
-        case MenuCommand.editPassword:
-
-          break
-        case MenuCommand.loginOut:
-          this.loginOut()
-          break
-      }
-    }
-
-    handleClosed () {
-      this.currentComponent = ''
-    }
-
-    mounted () {
-      console.log('mounted')
-    }
+  mounted () {
+    this.activeIndex = this.$route.path
+  }
 }
 </script>
 

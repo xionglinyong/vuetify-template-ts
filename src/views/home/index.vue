@@ -1,11 +1,11 @@
 <template lang="pug">
   div(:class="$style.inner")
-    div#map
+    div#map home
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { Direction } from '@/interface/enum'
+import { Direction } from '@/types/enum'
 
 @Component({
 })

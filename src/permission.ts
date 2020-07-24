@@ -3,7 +3,7 @@ import whiteList from '@/router/whiteList'
 import { getToken } from '@/utils/auth'
 import store from '@/store'
 import { Route, RouteConfig } from 'vue-router'
-import { Menus } from '@/interface/permission'
+import { Menus } from '@/types/permission'
 import Layout from '@/layout/index.vue'
 
 let init = true
@@ -13,35 +13,22 @@ let init = true
  * 实现思路：
  *  1.递归调用
  *  2.将递归数据放入路由数据
- * @param routerData
+ * @param routerData 路由数据
  */
 function recursionRouter (menus: Array<Menus>): Array<RouteConfig> {
   const routes: Array<RouteConfig> = []
   for (const menu of menus) {
-    let route: RouteConfig
-    if (menu.children && (menu.children as Array<Menus>).length > 0) {
-      route = {
-        path: menu.path,
-        component: () => import('@/layout/index.vue'),
-        name: menu.name,
-        meta: menu.meta
-      }
+    const route: RouteConfig = {
+      path: menu.path,
+      component: () => import('@/layout/index.vue'),
+      name: menu.name,
+      meta: menu.meta
+    }
+    if (menu?.children ?? false) {
       route.children = recursionRouter(menu.children as Array<Menus>)
     } else {
-      route = {
-        path: '/',
-        name: `${menu.name}Layout`,
-        component: Layout,
-        children: [
-          {
-            path: menu.path,
-            name: menu.name,
-            meta: menu.meta,
-            component: () => import(`@/views${menu.componentPath}/index.vue`)
-          }
-        ]
-      }
-      // route.component = () => import(`@/views${menu.componentPath}/index.vue`)
+      // 路由懒加载，优化首屏加载时间
+      route.component = () => import(`@/views${menu.componentPath}/index.vue`)
     }
     routes.push(route)
   }
@@ -61,10 +48,13 @@ router.beforeEach(async (to: Route, from: Route, next: any) => {
     }
     // 首次加载或刷新页面
     if (init) {
-      const children = await store.getters.menu
-      router.addRoutes(recursionRouter(children))
+      const routerData = await store.getters.menu
+      router.addRoutes(recursionRouter(routerData))
       init = false
-      next({ ...to, replace: true })
+      next({
+        ...to,
+        replace: true
+      })
     } else {
       next()
     }
