@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import { Component, Ref, Vue } from 'vue-property-decorator'
-import { LoginUser } from '../../types/user'
+import { LoginUser } from '@/types/user'
 import { namespace } from 'vuex-class'
 
 const user = namespace('user')

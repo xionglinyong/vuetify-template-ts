@@ -13,22 +13,35 @@ let init = true
  * 实现思路：
  *  1.递归调用
  *  2.将递归数据放入路由数据
- * @param routerData 路由数据
+ * @param menus 路有数据
+ * @param index 递归深度
  */
-function recursionRouter (menus: Array<Menus>): Array<RouteConfig> {
+function recursionRouter (menus: Array<Menus>, index = 1): Array<RouteConfig> {
   const routes: Array<RouteConfig> = []
   for (const menu of menus) {
     const route: RouteConfig = {
       path: menu.path,
-      component: () => import('@/layout/index.vue'),
+      // 一层路由时路由容器为layout，否则使用数据提供的容器
+      component: index === 1
+        ? () => import('@/layout/index.vue')
+        : () => import(`@/views${menu.componentPath}/index.vue`),
       name: menu.name,
       meta: menu.meta
     }
+    // 如果是嵌套路由，则递推调用
     if (menu?.children ?? false) {
-      route.children = recursionRouter(menu.children as Array<Menus>)
-    } else {
-      // 路由懒加载，优化首屏加载时间
-      route.component = () => import(`@/views${menu.componentPath}/index.vue`)
+      route.children = recursionRouter(menu.children as Array<Menus>, index + 1)
+    } else if (index === 1) {
+      // 如果是一级路由，则添加内容为layout路由
+      route.children = [{
+        path: menu.path,
+        name: menu.name,
+        meta: {
+          title: menu.meta?.title,
+          icon: menu.meta?.icon
+        },
+        component: () => import(`@/views${menu.componentPath}/index.vue`)
+      }]
     }
     routes.push(route)
   }
@@ -49,7 +62,9 @@ router.beforeEach(async (to: Route, from: Route, next: any) => {
     // 首次加载或刷新页面
     if (init) {
       const routerData = await store.getters.menu
-      router.addRoutes(recursionRouter(routerData))
+      const routes = recursionRouter(routerData)
+      console.log(routes)
+      router.addRoutes(routes)
       init = false
       next({
         ...to,

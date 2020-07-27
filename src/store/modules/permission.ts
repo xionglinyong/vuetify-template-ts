@@ -34,6 +34,15 @@ const asyncRoutes: Array<Menus> = [
     ]
   },
   {
+    path: '/map',
+    name: 'Map',
+    meta: {
+      title: '地图',
+      icon: 'mdi-map'
+    },
+    componentPath: '/map'
+  },
+  {
     path: '*',
     name: '404',
     meta: {
