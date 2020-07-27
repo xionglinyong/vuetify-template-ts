@@ -77,14 +77,10 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Nav from '@/layout/nav.vue'
 import { Getter } from 'vuex-class'
 import { Menus } from '@/types/permission'
 
 @Component({
-  components: {
-    Nav
-  }
 })
 export default class Layout extends Vue {
   activeIndex = '/company'

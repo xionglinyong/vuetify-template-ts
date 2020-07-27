@@ -29,10 +29,3 @@ declare module 'vue/types/vue' {
     };
   }
 }
-
-interface RenumberButtonOption {
-  min: number;
-  max: number;
-  step: number;
-  text: string;
-}
