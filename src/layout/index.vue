@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-app
+  v-app(:class="$style.layout")
     v-navigation-drawer(
       v-model="drawerVisible"
       class="indigo accent-2"
@@ -8,26 +8,37 @@
       app
       clipped)
       v-list(dense nav)
-        template(v-for="menu in menus")
+        template(v-for="(menu,index) in menus")
           template(v-if="menu.name!=='404' && (!menu.children || menu.children.length===0)")
-            v-list-item(link :key="menu.meta.title")
+            v-list-item(
+              :class="{[$style.menuActive]:$route.path===menu.path}"
+              link
+              :key="menu.meta.title"
+              @click="$route.path!==menu.path && $router.push(menu.path)")
               v-list-item-icon
                 v-icon {{ menu.meta.icon }}
               v-list-item-content
                 v-list-item-title {{ menu.meta.title }}
           template(v-if="menu.name!=='404' && (menu.children && menu.children.length>0)")
-            v-menu(top :offset-x="offset")
-              template v-slot:activator="{ on, attrs }"
-                v-btn(
-                  color="primary"
-                  dark
+            v-menu(top :offset-x="true")
+              template(v-slot:activator="{ on, attrs }")
+                v-list-item(
                   v-bind="attrs"
-                  v-on="on") Dropdown
+                  v-on="on"
+                  link
+                  :class="{[$style.menuActive]:$route.path.includes(menu.path)}"
+                  @click="selectMenuIndex=index"
+                  :key="menu.meta.title")
+                  v-list-item-icon
+                    v-icon {{ menu.meta.icon }}
+                  v-list-item-content
+                    v-list-item-title {{ menu.meta.title }}
               v-list
                 v-list-item(
-                  v-for="(item, index) in items"
+                  v-for="(item, index) in childrenMenus"
+                  :class="{[$style.menuActive]:$route.path===item.path}"
                   :key="index"
-                  @click="")
+                  @click="$route.path!==item.path && $router.push(item.path)")
                   v-list-item-title {{ item.title }}
     v-app-bar(
       color="indigo darken-2"
@@ -42,9 +53,7 @@
         v-icon mdi-heart
       v-btn(icon)
         v-icon mdi-magnify
-      v-menu(
-        left
-        bottom)
+      v-menu(top)
         template(v-slot:activator="{ on, attrs }")
           v-btn(
             icon
@@ -67,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import Nav from '@/layout/nav.vue'
 import { Getter } from 'vuex-class'
 import { Menus } from '@/types/permission'
@@ -80,16 +89,22 @@ import { Menus } from '@/types/permission'
 export default class Layout extends Vue {
   activeIndex = '/company'
   drawerVisible=true
-  links=[]
+  selectMenuIndex=0
+
   @Getter('menu') menus!: Array<Menus>
 
-  mounted () {
-    this.activeIndex = this.$route.path
-  }
-
-  @Watch('$route', { deep: true })
-  onRouteChange (value: any) {
-    this.activeIndex = value.path
+  get childrenMenus ():Array<{
+    title:string;
+    path:string;
+    isActive:boolean;
+  }> {
+    const parentMenu = this?.menus[this.selectMenuIndex]
+    const menus:Array<Menus> = parentMenu?.children ?? []
+    return menus.map((menu:Menus) => ({
+      path: `${parentMenu?.path}/${menu.path}`,
+      title: menu.meta?.title ?? '',
+      isActive: false
+    }))
   }
 }
 </script>
@@ -127,34 +142,7 @@ export default class Layout extends Vue {
       transform translate3d(0px, 0px, 0px) rotateY(0deg)
 </style>
 <style lang="stylus" rel="stylesheet/stylus" module>
-  .layout1
-    width 100%
-    height 100%
-    display grid
-    grid-template-columns 150px auto
-    grid-template-rows 66px auto
-    perspective 800px
-
-    .nav
-      grid-column 1 / span 2
-
-    .menu
-      user-select none
-      width 100%
-      overflow hidden auto
-
-    .routerViewInner
-      position: relative;
-      background #fff
-
-      .routerView
-        position: absolute;
-        top 0
-        left 0
-        width 100%
-        height 100%
-        padding 20px
-        box-sizing border-box
-        overflow hidden auto
-        transition all .5s
+.layout
+  .menuActive
+    background rgba(48,71,220,0.4)
 </style>
