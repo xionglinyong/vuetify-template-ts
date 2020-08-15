@@ -4,7 +4,6 @@ import { getToken } from '@/utils/auth'
 import store from '@/store'
 import { Route, RouteConfig } from 'vue-router'
 import { Menus } from '@/types/permission'
-import Layout from '@/layout/index.vue'
 
 let init = true
 
@@ -63,7 +62,6 @@ router.beforeEach(async (to: Route, from: Route, next: any) => {
     if (init) {
       const routerData = await store.getters.menu
       const routes = recursionRouter(routerData)
-      console.log(routes)
       router.addRoutes(routes)
       init = false
       next({

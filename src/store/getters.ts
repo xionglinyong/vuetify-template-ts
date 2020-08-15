@@ -1,8 +1,8 @@
 export default {
   user: (state: any) => {
-    return state.user.userInfo
+    return state.User.userInfo
   },
   menu: (state: any) => {
-    return state.permission.menu
+    return state.Permission.menu
   }
 }

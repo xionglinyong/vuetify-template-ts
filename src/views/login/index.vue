@@ -55,9 +55,10 @@
 <script lang="ts">
 import { Component, Ref, Vue } from 'vue-property-decorator'
 import { LoginUser } from '@/types/user'
-import { namespace } from 'vuex-class'
+import User from '@/store/modules/user'
+import { getModule } from 'vuex-module-decorators'
 
-const user = namespace('user')
+let user:User
 
 @Component({
   components: {
@@ -92,9 +93,6 @@ export default class Login extends Vue {
 
   loading=false
 
-  // vuex
-  @user.Action('login') login!: (user:LoginUser)=>void
-
   @Ref('form') readonly form!:HTMLElement
 
   async handleLogin () {
@@ -104,7 +102,7 @@ export default class Login extends Vue {
       // @ts-ignore
       const valid = await this.form.validate()
       if (valid) {
-        await this.login(this.user)
+        await user.login()
       } else {
         throw new Error('请输入账号或者密码')
       }
@@ -116,6 +114,10 @@ export default class Login extends Vue {
       }
     }
     this.loading = false
+  }
+
+  mounted ():void {
+    user = getModule(User, this.$store)
   }
 }
 </script>

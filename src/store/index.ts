@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import user from '@/store/modules/user'
-import permission from '@/store/modules/permission'
+import User from '@/store/modules/user'
+import Permission from '@/store/modules/permission'
 import getters from '@/store/getters'
 Vue.use(Vuex)
 
@@ -14,7 +14,7 @@ export default new Vuex.Store({
   },
   getters,
   modules: {
-    user,
-    permission
+    User,
+    Permission
   }
 })

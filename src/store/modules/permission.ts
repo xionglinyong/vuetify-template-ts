@@ -1,5 +1,6 @@
 import { Menus } from '@/types/permission'
 import { getUserMenu, setUserMenu } from '@/utils/auth'
+import { Module, Mutation, VuexModule } from 'vuex-module-decorators'
 
 const asyncRoutes: Array<Menus> = [
   {
@@ -51,20 +52,18 @@ const asyncRoutes: Array<Menus> = [
     componentPath: '/404'
   }
 ]
-export default {
-  state: {
-    menu: getUserMenu() ?? asyncRoutes
-  },
-  mutations: {
-    SET_MENU (state: any, menus: Array<Menus>) {
-      state.menu = menus
-      setUserMenu(menus)
-    }
-  },
-  actions: {
-    setMenu ({ commit }: { commit: any }, menus: Array<Menus>) {
-      commit('SET_MENU', menus ?? getUserMenu())
-    }
-  },
-  namespaced: true
+
+@Module({
+  name: 'Permission',
+  namespaced: true,
+  stateFactory: true
+})
+export default class Permission extends VuexModule {
+  menu: Array<Menus> = getUserMenu() ?? asyncRoutes
+
+  @Mutation
+  setMenu (menus: Array<Menus>) {
+    this.menu = menus
+    setUserMenu(menus)
+  }
 }
