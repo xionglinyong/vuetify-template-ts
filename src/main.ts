@@ -3,12 +3,15 @@ import '@/plugins/axios'
 import App from '@/App.vue'
 import router from '@/router'
 import store from '@/store'
+import Toast from '@/plugins/toast/toast.ts'
 
-import '@/stylus/main.styl'
+import '@/stylus/index.styl'
 import '@/permission'
-import vuetify from './plugins/vuetify'
+import vuetify from '@/plugins/vuetify'
 
 Vue.config.productionTip = false
+
+Vue.use(Toast)
 
 new Vue({
   router,

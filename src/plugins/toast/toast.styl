@@ -1,0 +1,77 @@
+.toast
+  position absolute
+  top 100px
+  left 50%
+  transform translate3d(-50%,0%,0px) scale(1) rotateX(0deg)
+  transform-origin center
+  display flex
+  flex-direction row
+  align-items center
+  padding 15px 20px
+  z-index 99999
+  background #Fff
+  width 380px
+  &.round
+    border-radius 5px
+  &.top
+    top 100px
+    transform translate3d(-50%,0%,0px) scale(1) rotateX(0deg)
+  &.center
+    top 50%
+    transform translate3d(-50%,-50%,0px) scale(1) rotateX(0deg)
+  &.bottom
+    bottom 20px
+    transform translate3d(-50%,0%,0px) scale(1) rotateX(0deg)
+  &>.icon
+    width 16px
+    margin-right 5px
+  &>.content
+    flex 1
+  &>.close
+    width 24px
+    height 24px
+    text-align center
+    cursor pointer
+
+.toast-enter-active
+  animation toastEnter .5s
+.toast-leave-active
+  animation toastLeave .5s
+
+
+.toast-center-enter-active
+  animation toastCenterEnter .5s
+.toast-center-leave-active
+  animation toastCenterLeave .5s
+
+@keyframes toastEnter
+  from
+    opacity 0
+    transform translate3d(-50%,0%,-10px) scale(0.5) rotateX(45deg)
+  to
+    opacity 1
+    transform translate3d(-50%,0%,0px) scale(1) rotateX(0deg)
+
+@keyframes toastLeave
+  from
+    opacity 1
+    transform translate3d(-50%,0%,0px) scale(1) rotateX(0deg)
+  to
+    opacity 0
+    transform translate3d(-50%,0%,50px) scale(1.1) rotateX(-45deg)
+
+@keyframes toastCenterEnter
+  from
+    opacity 0
+    transform translate3d(-50%,-50%,-50px) scale(0.5) rotateX(0deg)
+  to
+    opacity 1
+    transform translate3d(-50%,-50%,0px) scale(1) rotateX(0deg)
+
+@keyframes toastCenterLeave
+  from
+    opacity 1
+    transform translate3d(-50%,-50%,0px) scale(1) rotateX(0deg)
+  to
+    opacity 0
+    transform translate3d(-50%,-50%,50px) scale(1.1) rotateX(0deg)

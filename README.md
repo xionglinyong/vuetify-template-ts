@@ -3,7 +3,7 @@
 - vue-router
 - vuex
 - axios
-- element-ui
+- vuetify
 - jset单元测
 
 # 功能
