@@ -1,4 +1,5 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import { RGB2Hex } from '@/utils/colors'
 
 @Component({
   components: {}
@@ -16,6 +17,7 @@ export default class Toast extends Vue {
   bgColor = '#fff'
   width = ''
   height = ''
+  border:string|boolean=false
 
   render () {
     const {
@@ -25,6 +27,7 @@ export default class Toast extends Vue {
       position,
       visible,
       color,
+      border,
       bgColor,
       width,
       round,
@@ -39,9 +42,10 @@ export default class Toast extends Vue {
                 color,
                 background: bgColor,
                 width,
+                border,
                 height
               }}
-              class={['toast', position, { round }]}>
+              class={['toast', position, { round }, border && { round, border: this.border }]}>
               {icon && <i class={['icon', icon]}/>}
               <div class='content'>{message}</div>
               {

@@ -74,6 +74,20 @@ describe('Toast组件功能测试', () => {
     expect(toastWrapper.text()).toBe('')
   })
 
+  it('icon显示', function () {
+    const icon = 'iconfont icon-pro-info'
+    const toastWrapper = shallowMount(Toast, {
+      data (): ToastOption {
+        return {
+          icon,
+          message: 'icon显示'
+        }
+      }
+    })
+    const iconWrapper = toastWrapper.find(`icon ${icon}`)
+    expect(iconWrapper).toBeDefined()
+  })
+
   it('圆角', async function () {
     const toastWrapper = shallowMount(Toast, {
       data (): ToastOption {

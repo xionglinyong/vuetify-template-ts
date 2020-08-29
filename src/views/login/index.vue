@@ -1,20 +1,6 @@
 <template lang="pug">
   v-app
     v-main
-      v-snackbar(
-        v-model="snackbar.visible"
-        :top="true"
-        :color="snackbar.color"
-        :multi-line="multiLine") {{ snackbar.text }}
-        template(v-slot:action="{ attrs }")
-          v-btn(
-            color="#fff"
-            text
-            dark
-            icon
-            v-bind="attrs"
-            @click="snackbar.visible = false")
-            v-icon mdi-close
       v-container
         div(:class="$style.loginPage")
           h1 通用后台模板
@@ -65,16 +51,6 @@ let user:User
   }
 })
 export default class Login extends Vue {
-  snackbar:{
-    visible:boolean;
-    text:string;
-    color:string;
-  }={
-    visible: false,
-    text: '',
-    color: 'success'
-  }
-
   loginNameRules= [
     (v:string) => !!v || '请输入用户名',
     (v:string) => (v && v.length <= 20) || '用户名必须是20位以内'
@@ -107,16 +83,20 @@ export default class Login extends Vue {
         throw new Error('请输入账号或者密码')
       }
     } catch (e) {
-      this.snackbar = {
-        text: e.message,
-        visible: true,
-        color: 'error'
-      }
+      this.$toast({
+        message: e.message,
+        border: true,
+        color: 'red'
+      })
     }
     this.loading = false
   }
 
   mounted ():void {
+    this.$toast({
+      message: '输入任意账号密码登录',
+      border: true
+    })
     user = getModule(User, this.$store)
   }
 }
@@ -132,6 +112,8 @@ export default class Login extends Vue {
   max-height 100%
   transform translate(-50%,-50%)
   padding 40px
+  border-radius 5px
+  box-shadow 0px 0px 18px 0px #c1c1c1
   h1
     text-align-last center
     padding-bottom: 38px;

@@ -10,6 +10,7 @@ export interface ToastOption {
   color?: string;
   bgColor?: string;
   width?: string;
+  border?: string | boolean;
   height?: string;
 }
 
@@ -25,6 +26,7 @@ export interface ToastVNode extends VNode {
   color: string;
   bgColor: string;
   width: string;
+  border?: string | boolean;
   height: string;
 
   closeToast (): void;

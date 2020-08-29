@@ -41,5 +41,6 @@ console.log(toastVNode.$data)
 | bgColor | string | false | 背景颜色 | ❎ |
 | width | string | '#333' | 宽度 | ❎ |
 | height | string | '#fff' | 高度 | ❎ |
+| border | boolean/string | false | 边框 | ❎ |
 ### 实例方法
 closeToast():void
