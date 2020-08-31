@@ -44,3 +44,4 @@ console.log(toastVNode.$data)
 | border | boolean/string | false | 边框 | ❎ |
 ### 实例方法
 closeToast():void
+描述：关闭并销毁Toast
