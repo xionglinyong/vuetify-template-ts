@@ -1,5 +1,5 @@
-import { Component, Prop, Vue } from 'vue-property-decorator'
-import { RGB2Hex } from '@/utils/colors'
+import { Component, Vue } from 'vue-property-decorator'
+import { VNode } from 'vue'
 
 @Component({
   components: {}
@@ -7,8 +7,8 @@ import { RGB2Hex } from '@/utils/colors'
 export default class Toast extends Vue {
   visible = false
   timer = 0
-  icon = ''
   message = ''
+  icon = ''
   close = true
   wait = 3000
   position: 'top' | 'center' | 'bottom' = 'top'
@@ -19,7 +19,7 @@ export default class Toast extends Vue {
   height = ''
   border:string|boolean=false
 
-  render () {
+  render ():VNode {
     const {
       icon,
       message,
@@ -47,7 +47,7 @@ export default class Toast extends Vue {
               }}
               class={['toast', position, { round }, border && { round, border: this.border }]}>
               {icon && <i class={['icon', icon]}/>}
-              <div class='content'>{message}</div>
+              <div class='content'>{ message }</div>
               {
                 close && <i class='close mdi mdi-close' onclick={() => {
                   this.visible = false
@@ -64,12 +64,12 @@ export default class Toast extends Vue {
     this.visible = false
   }
 
-  afterLeave () {
+  afterLeave ():void {
     this.$el.remove()
     this.$destroy()
   }
 
-  mounted () {
+  mounted ():void {
     this.visible = true
     this.timer = setTimeout(() => {
       this.visible = false

@@ -11,11 +11,3 @@ export enum RequestMethod {
   put='put',
   delete='delete'
 }
-
-export enum Direction {
-  up,
-  right,
-  bottom,
-  left,
-  center,
-}

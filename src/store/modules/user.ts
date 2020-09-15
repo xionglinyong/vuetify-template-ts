@@ -11,9 +11,12 @@ import {
 } from '@/utils/auth'
 import { UserInfo } from '@/types/user'
 import router from '@/router'
+import store from '@/store/index'
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 
 @Module({
+  dynamic: true,
+  store,
   name: 'User',
   namespaced: true,
   stateFactory: true

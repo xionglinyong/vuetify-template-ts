@@ -17,7 +17,6 @@
               label="用户名"
               required
               prepend-icon="mdi-account")
-
             v-text-field(
               v-model="user.PassWord"
               :counter="20"
@@ -44,7 +43,7 @@ import { LoginUser } from '@/types/user'
 import User from '@/store/modules/user'
 import { getModule } from 'vuex-module-decorators'
 
-let user:User
+const user:User = getModule(User)
 
 @Component({
   components: {
@@ -97,7 +96,6 @@ export default class Login extends Vue {
       message: '输入任意账号密码登录',
       border: true
     })
-    user = getModule(User, this.$store)
   }
 }
 </script>
@@ -113,7 +111,7 @@ export default class Login extends Vue {
   transform translate(-50%,-50%)
   padding 40px
   border-radius 5px
-  box-shadow 0px 0px 18px 0px #c1c1c1
+  box-shadow 0 0 18px 0 #c1c1c1
   h1
     text-align-last center
     padding-bottom: 38px;

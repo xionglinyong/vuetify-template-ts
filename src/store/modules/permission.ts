@@ -1,16 +1,17 @@
 import { Menus } from '@/types/permission'
 import { getUserMenu, setUserMenu } from '@/utils/auth'
 import { Module, Mutation, VuexModule } from 'vuex-module-decorators'
+import store from '@/store/index'
 
 const asyncRoutes: Array<Menus> = [
   {
-    path: '/home',
-    name: 'Home',
+    path: '/toast',
+    name: 'Toast',
     meta: {
-      title: '首页',
-      icon: 'mdi-home'
+      title: 'Toast',
+      icon: 'mdi-android-messages'
     },
-    componentPath: '/home'
+    componentPath: '/toast'
   },
   {
     path: '/enterprise',
@@ -35,13 +36,13 @@ const asyncRoutes: Array<Menus> = [
     ]
   },
   {
-    path: '/map',
-    name: 'Map',
+    path: '/theme',
+    name: 'Theme',
     meta: {
-      title: '地图',
-      icon: 'mdi-map'
+      title: '换肤',
+      icon: 'iconfont icon-theme'
     },
-    componentPath: '/map'
+    componentPath: '/theme'
   },
   {
     path: '*',
@@ -54,6 +55,8 @@ const asyncRoutes: Array<Menus> = [
 ]
 
 @Module({
+  dynamic: true,
+  store,
   name: 'Permission',
   namespaced: true,
   stateFactory: true

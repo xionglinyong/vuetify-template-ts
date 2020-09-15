@@ -11,7 +11,7 @@ function install (Vue: VueConstructor) {
     }
     const constructor: VueConstructor = Vue.extend(Toast)
     const toastVNode = new constructor({
-      data
+      data: Object.assign({}, data)
     })
     toastVNode.$mount()
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

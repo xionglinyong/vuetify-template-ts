@@ -11,17 +11,17 @@ const routes = [
     component: Layout,
     children: [
       {
-        path: '/home',
-        name: 'Home',
+        path: '/toast',
+        name: 'Toast',
         meta: {
-          title: '首页',
-          icon: 'el-icon-house'
+          title: 'toast',
+          icon: 'mdi-android-messages'
         },
-        component: () => import('@/views/home/index.vue')
+        component: () => import('@/views/toast/index.vue')
       },
       {
         path: '/',
-        redirect: '/home'
+        redirect: '/toast'
       }
     ]
   },

@@ -20,7 +20,7 @@
               v-list-item-content
                 v-list-item-title {{ menu.meta.title }}
           template(v-if="menu.name!=='404' && (menu.children && menu.children.length>0)")
-            v-menu(top :offset-x="true")
+            v-menu(top :offset-x="true" transition="fab-transition")
               template(v-slot:activator="{ on, attrs }")
                 v-list-item(
                   v-bind="attrs"
@@ -53,6 +53,10 @@
         v-icon mdi-heart
       v-btn(icon)
         v-icon mdi-magnify
+      v-btn(icon)
+        v-icon mdi-account
+      v-btn(icon)
+        v-icon iconfont icon-theme
       v-menu(top)
         template(v-slot:activator="{ on, attrs }")
           v-btn(
@@ -66,8 +70,8 @@
             :key="n"
             @click="() => {}")
             v-list-item-title Option {{ n }}
-    v-main
-      v-container(class="fill-height")
+    v-main(:class="$style.main")
+      v-container(class="fill-height" :class="$style.routerInner")
         transition(
           name="rv-fade"
           mode="out-in")
@@ -145,6 +149,18 @@ export default class Layout extends Vue {
 </style>
 <style lang="stylus" rel="stylesheet/stylus" module>
 .layout
+  overflow hidden
   .menuActive
     background rgba(48, 71, 220, 0.4)
+  .main
+    overflow hidden
+    width 100%
+    height 100%
+    &>div
+      overflow hidden
+    .routerInner
+      transform-style preserve-3d
+      perspective 500px
+      overflow hidden
+      width 100%
 </style>
