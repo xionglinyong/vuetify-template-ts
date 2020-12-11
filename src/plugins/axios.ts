@@ -1,6 +1,4 @@
 import Vue, { PluginObject } from 'vue'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import axios, { AxiosResponse } from 'axios'
 import whiteList from '@/plugins/whiteList'
 import { getToken } from '@/utils/auth'

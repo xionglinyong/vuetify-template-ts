@@ -70,7 +70,7 @@ export default class Login extends Vue {
 
   @Ref('form') readonly form!:HTMLElement
 
-  async handleLogin () {
+  async handleLogin ():Promise<void> {
     this.loading = true
     try {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment

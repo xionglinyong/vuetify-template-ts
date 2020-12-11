@@ -67,9 +67,7 @@ describe('Toast组件功能测试', () => {
       }
     })
     await new Promise(resolve => {
-      setTimeout(() => {
-        resolve()
-      }, wait)
+      setTimeout(resolve, wait)
     })
     expect(toastWrapper.text()).toBe('')
   })
