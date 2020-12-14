@@ -25,13 +25,13 @@ const asyncRoutes: Array<Menus> = [
         path: 'ledger',
         componentPath: '/enterprise/ledger',
         name: 'Ledger',
-        meta: { title: '企业台账' }
+        meta: { icon: 'mdi-widgets', title: '企业台账' }
       },
       {
         path: 'manage',
         componentPath: '/enterprise/manage',
         name: 'Manage',
-        meta: { title: '企业管理' }
+        meta: { icon: 'mdi-widgets', title: '企业管理' }
       }
     ]
   },

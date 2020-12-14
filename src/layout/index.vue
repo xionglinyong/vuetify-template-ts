@@ -1,45 +1,5 @@
 <template lang="pug">
   v-app(:class="$style.layout")
-    v-navigation-drawer(
-      v-model="drawerVisible"
-      class="indigo accent-2"
-      width="160"
-      dark
-      app
-      clipped)
-      v-list(dense nav)
-        template(v-for="(menu,index) in menus")
-          template(v-if="menu.name!=='404' && (!menu.children || menu.children.length===0)")
-            v-list-item(
-              link
-              :exact-active-class="$style.menuActive"
-              :to="menu.path"
-              :key="menu.meta.title")
-              v-list-item-icon
-                v-icon {{ menu.meta.icon }}
-              v-list-item-content
-                v-list-item-title {{ menu.meta.title }}
-          template(v-if="menu.name!=='404' && (menu.children && menu.children.length>0)")
-            v-menu(top :offset-x="true" transition="fab-transition")
-              template(v-slot:activator="{ on, attrs }")
-                v-list-item(
-                  v-bind="attrs"
-                  v-on="on"
-                  link
-                  :class="{[$style.menuActive]:$route.path.includes(menu.path)}"
-                  @click="selectMenuIndex=index"
-                  :key="menu.meta.title")
-                  v-list-item-icon
-                    v-icon {{ menu.meta.icon }}
-                  v-list-item-content
-                    v-list-item-title {{ menu.meta.title }}
-              v-list
-                v-list-item(
-                  :exact-active-class="$style.menuActive"
-                  :to="item.path"
-                  v-for="(item, index) in childrenMenus"
-                  :key="index")
-                  v-list-item-title {{ item.title }}
     v-app-bar(
       color="indigo darken-2"
       app
@@ -70,6 +30,44 @@
             :key="n"
             @click="() => {}")
             v-list-item-title Option {{ n }}
+    v-navigation-drawer(
+      v-model="drawerVisible"
+      class="indigo accent-2"
+      width="240"
+      dark
+      app
+      clipped)
+      v-list(dense nav)
+        template(v-for="(menu,index) in menus")
+          template(v-if="menu.name!=='404' && (!menu.children || menu.children.length===0)")
+            v-list-item(
+              link
+              :exact-active-class="$style.menuActive"
+              :to="menu.path"
+              :key="menu.meta.title")
+              v-list-item-icon
+                v-icon {{ menu.meta.icon }}
+              v-list-item-content
+                v-list-item-title {{ menu.meta.title }}
+          template(v-if="menu.name!=='404' && (menu.children && menu.children.length>0)")
+            v-list-group(
+              no-action
+              @click="selectMenuIndex=index"
+              :prepend-icon="menu.meta.icon"
+              :active-class="$style.menuActive")
+              template(#activator)
+                v-list-item-title(
+                  @click="selectMenuIndex=index"
+                  :key="menu.meta.title") {{ menu.meta.title }}
+              v-list-item(
+                :exact-active-class="$style.menuActive"
+                :to="item.path"
+                link
+                v-for="(item, index) in childrenMenus"
+                :key="index")
+                v-list-item-icon
+                  v-icon {{ item.meta.icon }}
+                v-list-item-title {{ item.title }}
     v-main(:class="$style.main")
       v-container(class="fill-height" :class="$style.routerInner")
         transition(
@@ -104,6 +102,7 @@ export default class Layout extends Vue {
     return menus.map((menu: Menus) => ({
       path: `${parentMenu?.path}/${menu.path}`,
       title: menu.meta?.title ?? '',
+      meta: menu.meta,
       isActive: false
     }))
   }
@@ -151,7 +150,7 @@ export default class Layout extends Vue {
 .layout
   overflow hidden
   .menuActive
-    background rgba(48, 71, 220, 0.4)
+    color #fff !important
   .main
     overflow hidden
     width 100%
